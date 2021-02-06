@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node ./server/index.js",
+    "dev": "next",
     "build": "next build",
     "start": "next start",
     "db:introspect": "dotenv-flow -- prisma introspect --schema=./server/prisma/schema.prisma",
@@ -15,7 +15,7 @@
     "@apollo/client": "^3.3.7",
     "@emotion/react": "^11.1.4",
     "@emotion/styled": "^11.0.0",
-    "apollo-server-express": "^2.19.2",
+    "apollo-server-micro": "^2.19.2",
     "deepmerge": "^4.2.2",
     "dotenv-flow-cli": "^1.0.0",
     "graphql": "^15.5.0",
