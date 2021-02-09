@@ -3,7 +3,7 @@ import { schema } from '~/server/graphql'
 
 const apolloServer = new ApolloServer({
   schema,
-  context = (ctx) => ctx,
+  context: ctx => ctx,
   playground: {
     settings: {
       'request.credentials': 'same-origin',

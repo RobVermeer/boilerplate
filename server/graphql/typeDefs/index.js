@@ -1,13 +1,17 @@
-const { gql } = require("@apollo/client")
+const { gql } = require('@apollo/client')
 
 const typeDefs = gql`
-    type Test {
-        id: Int!
-    }
+  type User {
+    id: Int!
+    name: String!
+    email: String
+    emailVerified: Boolean!
+    image: String
+  }
 
-    type Query {
-        test: Test
-    }
+  type Query {
+    viewer: User
+  }
 `
 
 module.exports = typeDefs

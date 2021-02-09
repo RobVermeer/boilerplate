@@ -5,48 +5,74 @@ import Main from '~/styles/Main'
 import Card from '~/styles/Card'
 import Grid from '~/styles/Grid'
 import Code from '~/styles/Code'
+import { useQuery } from '@apollo/client'
+import { addApolloState, createApolloClient } from '~/lib/apolloClient'
+import { signIn, signOut } from 'next-auth/client'
+import getViewer from '~/graphql/query/getViewer'
 
-const Home = () => (
-  <Layout>
-    <Head>
-      <title>Create Next App</title>
-      <link rel="icon" href="/favicon.ico" />
-    </Head>
+const Home = () => {
+  const { data = {} } = useQuery(getViewer)
+  const { viewer } = data
+  const loggedIn = Boolean(viewer)
 
-    <Main>
-      <h1>
-        Welcome to <a href="https://nextjs.org">Next.js!</a>
-      </h1>
+  return (
+    <Layout>
+      <Head>
+        <title>Create Next App</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
-      <p>
-        Get started by editing <Code>pages/index.js</Code>
-      </p>
+      <Main>
+        {loggedIn ? (
+          <button onClick={signOut}>Logout</button>
+        ) : (
+          <button onClick={signIn}>Login</button>
+        )}
 
-      <Grid>
-        <Card href="https://nextjs.org/docs">
-          <h3>Documentation &rarr;</h3>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </Card>
+        <h1>
+          Welcome to <a href="https://nextjs.org">Next.js!</a>
+        </h1>
 
-        <Card href="https://nextjs.org/learn">
-          <h3>Learn &rarr;</h3>
-          <p>Learn about Next.js in an interactive course with quizzes!</p>
-        </Card>
+        <p>
+          Get started by editing <Code>pages/index.js</Code>
+        </p>
 
-        <Card href="https://github.com/vercel/next.js/tree/master/examples">
-          <h3>Examples &rarr;</h3>
-          <p>Discover and deploy boilerplate example Next.js projects.</p>
-        </Card>
+        <Grid>
+          <Card href="https://nextjs.org/docs">
+            <h3>Documentation &rarr;</h3>
+            <p>Find in-depth information about Next.js features and API.</p>
+          </Card>
 
-        <Card href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app">
-          <h3>Deploy &rarr;</h3>
-          <p>Instantly deploy your Next.js site to a public URL with Vercel.</p>
-        </Card>
-      </Grid>
-    </Main>
+          <Card href="https://nextjs.org/learn">
+            <h3>Learn &rarr;</h3>
+            <p>Learn about Next.js in an interactive course with quizzes!</p>
+          </Card>
 
-    <Footer />
-  </Layout>
-)
+          <Card href="https://github.com/vercel/next.js/tree/master/examples">
+            <h3>Examples &rarr;</h3>
+            <p>Discover and deploy boilerplate example Next.js projects.</p>
+          </Card>
+
+          <Card href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app">
+            <h3>Deploy &rarr;</h3>
+            <p>
+              Instantly deploy your Next.js site to a public URL with Vercel.
+            </p>
+          </Card>
+        </Grid>
+      </Main>
+
+      <Footer />
+    </Layout>
+  )
+}
+
+export const getServerSideProps = async context => {
+  const client = createApolloClient(context)
+
+  await client.query({ query: getViewer })
+
+  return addApolloState(client, { props: {} })
+}
 
 export default Home
